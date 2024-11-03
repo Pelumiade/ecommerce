@@ -1,14 +1,18 @@
 package models
 
-import ()
+import (
+	"time"
+
+	"go.mongodb.org/mongo-driver/bson/primitive"
+)
 
 type User struct {
-	ID              primitive.objectID `json:"_id" bson:"_id"`
-	First_name      *string            `json:"first_name"`
-	Last_name       *string            `json:"last_name"`
-	Password        *string            `json:"password"`
-	Email           *string            `json:"email"`
-	Phone           *string            `json:"phone"`
+	ID              primitive.ObjectID `json:"_id" bson:"_id"`
+	First_name      *string            `json:"first_name"  validate:"required,min=2,max=30"`
+	Last_name       *string            `json:"last_name"   validate:"required,min=2,max=30"`
+	Password        *string            `json:"password"    validate:"required,min=6"`
+	Email           *string            `json:"email"       validate:"email, required"`
+	Phone           *string            `json:"phone"       validate:"required"`
 	Token           *string            `json:"token"`
 	Refresh_Token   *string            `json:"refresh_token"`
 	Created_At      time.Time          `json:"created_at"`
@@ -20,36 +24,36 @@ type User struct {
 }
 
 type Product struct {
-	Product_ID   primitive.bjectID `bson:"_id"`
-	Product_Name *string           `json:"product_name"`
-	Price        *uint64           `json:"price"`
-	Rating       *uint8            `json:"rating"`
-	Image        *string           `json:"image"`
+	Product_ID   primitive.ObjectID `bson:"_id"`
+	Product_Name *string            `json:"product_name"`
+	Price        *uint64            `json:"price"`
+	Rating       *uint8             `json:"rating"`
+	Image        *string            `json:"image"`
 }
 
 type ProductUser struct {
 	Product_ID   primitive.ObjectID `bson:"_id"`
-	Product_Name *string
-	Price        int
-	Rating       uint
-	Image        *string
+	Product_Name *string            `json:"product_name" bson: "product_name"`
+	Price        int                `json:"price" bson: "price"`
+	Rating       uint               `json:"rating" bson: "rating"`
+	Image        *string            `json:"image" bson: "image"`
 }
 
 type Address struct {
-	Address_id *string
-	House      *string
-	Street     *string
-	City       *string
-	Pincode    *string
+	Address_id *string `bson:"_id"`
+	House      *string `json:"house_name" bson: "house_name"`
+	Street     *string `json:"street_name" bson: "street_name"`
+	City       *string `json:"city_name" bson: "city_name"`
+	Pincode    *string `json:"pin_code" bson: "pin_code"`
 }
 
 type Order struct {
-	Order_ID       primitive.ObjectID
-	Order_Cart     []ProductUser
-	Ordered_At     time.Time
-	Price          int
-	Discount       *int
-	Payment_Method Payment
+	Order_ID       primitive.ObjectID `bson:"_id"`
+	Order_Cart     []ProductUser      `json:"order_list" bson: "order_list"`
+	Ordered_At     time.Time          `json:"ordered_at" bson: "ordered_at"`
+	Price          int                `json:"total_price" bson: "total_price"`
+	Discount       *int               `json:"discount_price" bson: "discount_price"`
+	Payment_Method Payment            `json:"payment_method" bson: "payment_method"`
 }
 
 type Payment struct {
